@@ -76,9 +76,9 @@ public class UserController {
         return iUserService.checkAnswer(username,question,answer);
     }
 
-    @RequestMapping(value = "forget_rest_password.do",method = RequestMethod.POST)
+    @RequestMapping(value = "forget_reset_password.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<String> forgetRestPassword(String username,String passwordNew,String forgetToken){
+    public ServerResponse<String> forgetResetPassword(String username,String passwordNew,String forgetToken){
         return iUserService.forgetResetPassword(username,passwordNew,forgetToken);
     }
 
@@ -112,7 +112,7 @@ public class UserController {
     public ServerResponse<User> get_information(HttpSession session){
         User currentUser = (User)session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"为登陆，需要登陆status=10");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"未登陆，需要登陆status=10");
         }
         return iUserService.getInformation(currentUser.getId());
     }

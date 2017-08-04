@@ -1,4 +1,4 @@
-package com.mmall.controller.portal.backend;
+package com.mmall.controller.backend;
 
 import com.mmall.common.Const;
 import com.mmall.common.ServerResponse;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
  * Created by chenyawei on 2017/7/5.
  */
 @Controller
-@RequestMapping("/manager/user")
+@RequestMapping("/manage/user")
 public class UserManageController {
 
     @Autowired

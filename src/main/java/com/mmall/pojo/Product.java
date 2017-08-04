@@ -12,7 +12,7 @@ public class Product {
 
     private String subtitle;
 
-    private String mainImage;
+        private String mainImage;
 
     private String subImages;
 

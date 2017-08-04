@@ -10,7 +10,6 @@ import com.mmall.util.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.security.provider.MD5;
 
 import java.util.UUID;
 
@@ -40,7 +39,7 @@ public class UserServiceimpl implements IUserService {
     }
 
     public ServerResponse<String> register(User user){
-        ServerResponse validResponse = this.checkValid(user.getUsername(),Const.UERNAME);
+        ServerResponse validResponse = this.checkValid(user.getUsername(),Const.USERNAME);
         if (!validResponse.isSuccess()){
             return validResponse;
         }
@@ -61,8 +60,8 @@ public class UserServiceimpl implements IUserService {
     public ServerResponse<String> checkValid(String str, String type) {
         if (StringUtils.isNotBlank(type)){
             //开始校验
-            if (Const.UERNAME.equals(type)){
-                int resultCount = userMapper.checkEmail(str);
+            if (Const.USERNAME.equals(type)){
+                int resultCount = userMapper.checkUsername(str);
                 if(resultCount>0){
                     return ServerResponse.createByErrorMessage("用户名已存在");
                 }
@@ -80,7 +79,7 @@ public class UserServiceimpl implements IUserService {
     }
 
     public ServerResponse<String> selectQuestion(String username) {
-        ServerResponse validResponse = this.checkValid(username,Const.UERNAME);
+        ServerResponse validResponse = this.checkValid(username,Const.USERNAME);
         if(validResponse.isSuccess()){
             //用户不存在
             return ServerResponse.createByErrorMessage("用户不存在");
@@ -98,6 +97,7 @@ public class UserServiceimpl implements IUserService {
             //说明问题及问题答案是这个用户的,并且是正确的
             String forgetToken = UUID.randomUUID().toString();
             TokenCache.setKey(TokenCache.TOKEN_PREFIX+username,forgetToken);
+            return ServerResponse.createBySuccessMessage(forgetToken);
         }
         return ServerResponse.createByErrorMessage("问题的答案错误");
     }
@@ -169,5 +169,21 @@ public class UserServiceimpl implements IUserService {
         user.setPassword(StringUtils.EMPTY);
         return ServerResponse.createBySuccess(user);
     }
+
+
+    //backend
+
+    /**
+     * 校验是否为管理员
+     * @param user
+     * @return
+     */
+    public ServerResponse checkAdminRole(User user){
+        if (user != null && user.getRole().intValue() == Const.Role.ROLE_ADMIN){
+            return ServerResponse.createBySuccess();
+        }
+        return ServerResponse.createByError();
+    }
+
 
 }
