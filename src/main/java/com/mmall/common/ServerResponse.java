@@ -2,8 +2,7 @@ package com.mmall.common;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.schema.JsonSerializableSchema;
-import org.omg.PortableInterceptor.SUCCESSFUL;
+
 
 import java.io.Serializable;
 
