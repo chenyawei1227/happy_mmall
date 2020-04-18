@@ -28,59 +28,55 @@ public class ShippingController {
 
     @RequestMapping("add.do")
     @ResponseBody
-    public ServerResponse add(HttpSession session, Shipping shipping){
+    public ServerResponse add(HttpSession session, Shipping shipping) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
-        return iShippingService.add(user.getId(),shipping);
+        return iShippingService.add(user.getId(), shipping);
     }
 
     @RequestMapping("del.do")
     @ResponseBody
-    public ServerResponse del(HttpSession session, Integer shippingId){
+    public ServerResponse del(HttpSession session, Integer shippingId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
-        return iShippingService.del(user.getId(),shippingId);
+        return iShippingService.del(user.getId(), shippingId);
     }
 
     @RequestMapping("update.do")
     @ResponseBody
-    public ServerResponse update(HttpSession session, Shipping shipping){
+    public ServerResponse update(HttpSession session, Shipping shipping) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
-        return iShippingService.update(user.getId(),shipping);
+        return iShippingService.update(user.getId(), shipping);
     }
 
     @RequestMapping("select.do")
     @ResponseBody
-    public ServerResponse<Shipping> select(HttpSession session, Integer shippingId){
+    public ServerResponse<Shipping> select(HttpSession session, Integer shippingId) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
-        return iShippingService.select(user.getId(),shippingId);
+        return iShippingService.select(user.getId(), shippingId);
     }
 
     @RequestMapping("list.do")
     @ResponseBody
-    public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
-                                         @RequestParam(value = "pageSize",defaultValue = "10")int pageSize,
-                                         HttpSession session){
+    public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                         HttpSession session) {
         User user = (User) session.getAttribute(Const.CURRENT_USER);
-        if (user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        if (user == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
-        return iShippingService.list(user.getId(),pageNum,pageSize);
+        return iShippingService.list(user.getId(), pageNum, pageSize);
     }
-
-
-
-
 
 
 }

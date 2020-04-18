@@ -7,6 +7,9 @@ import lombok.ToString;
 
 import java.util.Date;
 
+/**
+ * 购物车
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

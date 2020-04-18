@@ -11,15 +11,16 @@ public class Log4JTest {
 
     private final Logger logger = Logger.getLogger(this.getClass());
     private CartMapper cartMapper;
+
     @Test
     public void test1() {
         try {
             cartMapper.insert(null);
 
-        }catch (Exception se){
+        } catch (Exception se) {
             System.out.println(this.getClass().getName() + "common.createTaskInfo");
             //logger.warn(this.getClass().getName() + "common.createTaskInfo",se);
-            System.out.println(this.getClass().getName()+"成功反馈给推送服务器失败消息：来源sip.js:exports.get_msg_bysip");
+            System.out.println(this.getClass().getName() + "成功反馈给推送服务器失败消息：来源sip.js:exports.get_msg_bysip");
         }
 
     }

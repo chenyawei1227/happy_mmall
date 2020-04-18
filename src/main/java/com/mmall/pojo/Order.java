@@ -7,6 +7,10 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Date;
+
+/**
+ * 订单信息
+ */
 @Getter
 @Setter
 @NoArgsConstructor

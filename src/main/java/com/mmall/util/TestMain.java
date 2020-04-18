@@ -5,7 +5,7 @@ package com.mmall.util;
  */
 public class TestMain {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         int aa = 8;
         System.out.println(Math.sqrt(aa));
     }

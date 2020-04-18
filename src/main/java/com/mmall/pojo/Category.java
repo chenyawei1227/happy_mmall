@@ -1,6 +1,7 @@
 package com.mmall.pojo;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.util.Date;
 
@@ -9,6 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @ToString(exclude = "updateTime")
+@Accessors(chain = true)
 public class Category {
     private Integer id;
 

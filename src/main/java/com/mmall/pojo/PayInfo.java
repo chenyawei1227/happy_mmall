@@ -2,6 +2,9 @@ package com.mmall.pojo;
 
 import java.util.Date;
 
+/**
+ * 订单对于的支付信息
+ */
 public class PayInfo {
     private Integer id;
 
