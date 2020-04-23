@@ -76,7 +76,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
             user = JsonUtil.string2Obj(userJsonStr,User.class);
         }
 
-        log.info("登陆用户信息,loginToken:{},user:{}",loginToken,user.toString());
+        log.info("登陆用户信息,loginToken:{},user:{}",loginToken,user==null ? null:user.toString());
 
         if(user == null || (user.getRole().intValue() != Const.Role.ROLE_ADMIN)){
             //返回false.即不会调用controller里的方法
