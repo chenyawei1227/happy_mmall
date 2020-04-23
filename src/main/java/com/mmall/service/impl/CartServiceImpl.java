@@ -111,10 +111,12 @@ public class CartServiceImpl implements ICartService {
                 if (product != null) {
                     cartProductVo.setProductName(product.getName());
                     cartProductVo.setProductMainImage(product.getMainImage());
+                    cartProductVo.setProductImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix", "http://img.happymmall.com/"));
                     cartProductVo.setProductPrice(product.getPrice());
                     cartProductVo.setProductStatus(product.getStatus());
                     cartProductVo.setProductStatus(product.getStatus());
                     cartProductVo.setProductSubtitle(product.getSubtitle());
+                    cartProductVo.setProductStock(product.getStock());
                     //判断库存
                     int buyLimitCount = 0;
                     if (product.getStock() > cartItem.getQuantity()) {
