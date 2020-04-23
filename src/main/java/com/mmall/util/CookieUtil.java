@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CookieUtil {
 
 
-    private final static String COOKIE_DOMAIN = ".bytenote.cn"; // "localhost"; //".happymmall.com";
+    private final static String COOKIE_DOMAIN = "bytenote.cn"; // "localhost"; //".happymmall.com";
     private final static String COOKIE_NAME = "mmall_login_token";
 
 
