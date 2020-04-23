@@ -76,6 +76,8 @@ public class AuthorityInterceptor implements HandlerInterceptor {
             user = JsonUtil.string2Obj(userJsonStr,User.class);
         }
 
+        log.info("登陆用户信息,loginToken:{},user:{}",loginToken,user.toString());
+
         if(user == null || (user.getRole().intValue() != Const.Role.ROLE_ADMIN)){
             //返回false.即不会调用controller里的方法
             response.reset();//geelynote 这里要添加reset，否则报异常 getWriter() has already been called for this response.
@@ -86,7 +88,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
 
             //上传由于富文本的控件要求，要特殊处理返回值，这里面区分是否登录以及是否有权限
             if(user == null){
-                if(StringUtils.equals(className,"ProductManageController") && StringUtils.equals(methodName,"richtextImgUpload") && !StringUtils.equals(methodName,"upload")){
+                if(StringUtils.equals(className,"ProductManageController") && StringUtils.equals(methodName,"richtextImgUpload")){
                     Map resultMap = Maps.newHashMap();
                     resultMap.put("success",false);
                     resultMap.put("msg","请登录管理员");
