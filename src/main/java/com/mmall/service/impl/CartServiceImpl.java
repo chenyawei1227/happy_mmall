@@ -111,7 +111,7 @@ public class CartServiceImpl implements ICartService {
                 if (product != null) {
                     cartProductVo.setProductName(product.getName());
                     cartProductVo.setProductMainImage(product.getMainImage());
-                    cartProductVo.setProductImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix", "http://img.happymmall.com/"));
+                    cartProductVo.setProductImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix", "http://img.bytenote.cn/"));
                     cartProductVo.setProductPrice(product.getPrice());
                     cartProductVo.setProductStatus(product.getStatus());
                     cartProductVo.setProductStatus(product.getStatus());

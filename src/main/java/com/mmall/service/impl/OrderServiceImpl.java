@@ -158,7 +158,7 @@ public class OrderServiceImpl implements IOrderService {
         }
         orderProductVo.setProductTotalPrice(payment);
         orderProductVo.setOrderItemVoList(orderItemVoList);
-        orderProductVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix","http://img.happymmall.com/"));
+        orderProductVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix","http://img.bytenote.cn/"));
         return ServerResponse.createBySuccess(orderProductVo);
     }
 
@@ -223,7 +223,7 @@ public class OrderServiceImpl implements IOrderService {
         orderVo.setCreateTime(DateTimeUtil.dateToStr(order.getCreateTime()));
         orderVo.setCloseTime(DateTimeUtil.dateToStr(order.getCloseTime()));
 
-        orderVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix","http://img.happymmall.com/"));
+        orderVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix","http://img.bytenote.cn/"));
 
         List<OrderItemVo> orderItemVoList = Lists.newArrayList();
         for (OrderItem orderItem : orderItemList) {
@@ -440,7 +440,7 @@ public class OrderServiceImpl implements IOrderService {
                     log.error("上传二维码异常", e);
                 }
                 log.info("filePath:" + qrPath);
-                String qrUrl = PropertiesUtil.getProperty("ftp.server.http.prefix","http://img.happymmall.com/") + targetFile.getName();
+                String qrUrl = PropertiesUtil.getProperty("ftp.server.http.prefix","http://img.bytenote.cn/") + targetFile.getName();
                 resultMap.put("qrUrl", qrUrl);
                 return ServerResponse.createBySuccess(resultMap);
             case FAILED:
