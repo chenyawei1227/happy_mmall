@@ -35,7 +35,7 @@ public class FTPUtil {
 
     public static boolean uploadFile(List<File> fileList) throws IOException {
         FTPUtil ftpUtil = new FTPUtil(ftpIp, 21, ftpUser, ftpPass);
-        logger.info("开的链接ftp服务器");
+        logger.info("开始链接ftp服务器");
         boolean result = ftpUtil.uploadFile("img", fileList);
         return result;
     }
