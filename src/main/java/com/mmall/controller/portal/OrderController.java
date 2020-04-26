@@ -11,7 +11,7 @@ import com.mmall.pojo.User;
 import com.mmall.service.IOrderService;
 import com.mmall.util.CookieUtil;
 import com.mmall.util.JsonUtil;
-import com.mmall.util.RedisPoolUtil;
+import com.mmall.util.RedisShardedPoolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class OrderController {
     public ServerResponse create(HttpServletRequest httpServletRequest, Integer shippingId) {
 //        User user = (User) session.getAttribute(Const.CURRENT_USER);
         String loginToken = CookieUtil.readLoginToken(httpServletRequest);
-        User user  = JsonUtil.string2Obj(RedisPoolUtil.get(loginToken),User.class);
+        User user  = JsonUtil.string2Obj(RedisShardedPoolUtil.get(loginToken),User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
@@ -55,7 +55,7 @@ public class OrderController {
     public ServerResponse cancel(HttpServletRequest httpServletRequest, Long orderNo) {
         //User user = (User) session.getAttribute(Const.CURRENT_USER);
         String loginToken = CookieUtil.readLoginToken(httpServletRequest);
-        User user  = JsonUtil.string2Obj(RedisPoolUtil.get(loginToken),User.class);
+        User user  = JsonUtil.string2Obj(RedisShardedPoolUtil.get(loginToken),User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
@@ -68,7 +68,7 @@ public class OrderController {
     public ServerResponse getOrderCartProduct(HttpServletRequest httpServletRequest) {
         //User user = (User) session.getAttribute(Const.CURRENT_USER);
         String loginToken = CookieUtil.readLoginToken(httpServletRequest);
-        User user  = JsonUtil.string2Obj(RedisPoolUtil.get(loginToken),User.class);
+        User user  = JsonUtil.string2Obj(RedisShardedPoolUtil.get(loginToken),User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
@@ -80,7 +80,7 @@ public class OrderController {
     public ServerResponse detail(HttpServletRequest httpServletRequest, Long orderNo) {
         //User user = (User) session.getAttribute(Const.CURRENT_USER);
         String loginToken = CookieUtil.readLoginToken(httpServletRequest);
-        User user  = JsonUtil.string2Obj(RedisPoolUtil.get(loginToken),User.class);
+        User user  = JsonUtil.string2Obj(RedisShardedPoolUtil.get(loginToken),User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
@@ -92,7 +92,7 @@ public class OrderController {
     public ServerResponse list(HttpServletRequest httpServletRequest, @RequestParam(value = "pageNum", defaultValue = "1") int pageNum, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         //User user = (User) session.getAttribute(Const.CURRENT_USER);
         String loginToken = CookieUtil.readLoginToken(httpServletRequest);
-        User user  = JsonUtil.string2Obj(RedisPoolUtil.get(loginToken),User.class);
+        User user  = JsonUtil.string2Obj(RedisShardedPoolUtil.get(loginToken),User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
@@ -105,7 +105,7 @@ public class OrderController {
     public ServerResponse pay(Long orderNo, HttpServletRequest request) {
         //User user = (User) session.getAttribute(Const.CURRENT_USER);
         String loginToken = CookieUtil.readLoginToken(request);
-        User user  = JsonUtil.string2Obj(RedisPoolUtil.get(loginToken),User.class);
+        User user  = JsonUtil.string2Obj(RedisShardedPoolUtil.get(loginToken),User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }
@@ -157,7 +157,7 @@ public class OrderController {
     public ServerResponse<Boolean> queryOrderPayStatus(HttpServletRequest httpServletRequest, Long orderNo) {
         //User user = (User) session.getAttribute(Const.CURRENT_USER);
         String loginToken = CookieUtil.readLoginToken(httpServletRequest);
-        User user  = JsonUtil.string2Obj(RedisPoolUtil.get(loginToken),User.class);
+        User user  = JsonUtil.string2Obj(RedisShardedPoolUtil.get(loginToken),User.class);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(), ResponseCode.ILLEGAL_ARGUMENT.getDesc());
         }

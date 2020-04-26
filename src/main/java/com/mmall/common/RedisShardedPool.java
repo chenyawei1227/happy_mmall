@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * Created by chenyawei on 2019/3/10.
+ * redis分布式连接池
  */
 public class RedisShardedPool {
 

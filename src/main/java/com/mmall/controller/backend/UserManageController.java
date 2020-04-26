@@ -1,22 +1,21 @@
 package com.mmall.controller.backend;
 
-import com.google.gson.JsonObject;
 import com.mmall.common.Const;
 import com.mmall.common.ServerResponse;
-import com.mmall.dto.UserDto;
 import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
 import com.mmall.util.CookieUtil;
 import com.mmall.util.JsonUtil;
-import com.mmall.util.RedisPoolUtil;
 import com.mmall.util.RedisShardedPoolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 /**
  * Created by chenyawei on 2017/7/5.
@@ -41,7 +40,7 @@ public class UserManageController {
 
                 //新增redis共享cookie，session的方式
                 CookieUtil.writeLoginToken(httpServletResponse,session.getId());
-                RedisPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()),Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
+                RedisShardedPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()),Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
 
                 return response;
             }else{

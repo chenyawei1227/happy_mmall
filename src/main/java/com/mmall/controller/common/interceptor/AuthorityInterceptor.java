@@ -6,7 +6,6 @@ import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
 import com.mmall.util.CookieUtil;
 import com.mmall.util.JsonUtil;
-import com.mmall.util.RedisPoolUtil;
 import com.mmall.util.RedisShardedPoolUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -72,7 +71,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
 
         String loginToken = CookieUtil.readLoginToken(request);
         if(StringUtils.isNotEmpty(loginToken)){
-            String userJsonStr = RedisPoolUtil.get(loginToken);
+            String userJsonStr = RedisShardedPoolUtil.get(loginToken);
             user = JsonUtil.string2Obj(userJsonStr,User.class);
         }
 
