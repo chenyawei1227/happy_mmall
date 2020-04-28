@@ -11,7 +11,7 @@ echo "==================git pull======================"
     git pull
 
 echo "===========编译并跳过单元测试===================="
-    mvn clean package -Dmaven.test.skip=true
+    mvn clean package -Dmaven.test.skip=true -Pprod
 
 echo "============删除旧的ROOT.war==================="
     rm /developer/apache-tomcat-8.5.54/webapps/ROOT.war

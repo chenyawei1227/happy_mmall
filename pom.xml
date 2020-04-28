@@ -339,7 +339,10 @@
     <profiles>
         <profile>
             <id>dev</id>
-
+            <activation>
+                <!--默认激活的节点-->
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <properties>
                 <deploy.type>dev</deploy.type>
             </properties>
@@ -352,10 +355,6 @@
         </profile>
         <profile>
             <id>prod</id>
-            <activation>
-                <!--默认激活的节点-->
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <properties>
                 <deploy.type>prod</deploy.type>
             </properties>
