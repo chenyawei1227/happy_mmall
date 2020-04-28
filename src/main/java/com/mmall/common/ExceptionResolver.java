@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * springMVC全局异常处理
  * @Author: chenyawei
  * @Date: 2020-04-20  11:36
  * @Description:

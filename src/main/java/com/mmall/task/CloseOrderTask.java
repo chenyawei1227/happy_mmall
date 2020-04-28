@@ -30,6 +30,7 @@ public class CloseOrderTask {
     @Autowired
     private RedissonManager redissonManager;
 
+    //tomcat在shutdown关闭之前执行@PreDestroy注解的方法，但是kill -9 线程的时候还是不会执行
     @PreDestroy
     public void delLock(){
         RedisShardedPoolUtil.del(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);

@@ -75,7 +75,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
             user = JsonUtil.string2Obj(userJsonStr,User.class);
         }
 
-        log.info("登陆用户信息,loginToken:{},user:{}",loginToken,user==null ? null:user.toString());
+        //log.info("登陆用户信息,loginToken:{},user:{}",loginToken,user==null ? null:user.toString());
 
         if(user == null || (user.getRole().intValue() != Const.Role.ROLE_ADMIN)){
             //返回false.即不会调用controller里的方法
@@ -85,7 +85,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
 
             PrintWriter out = response.getWriter();
 
-            //上传由于富文本的控件要求，要特殊处理返回值，这里面区分是否登录以及是否有权限
+            //上传由于富文本的控件要求，要特殊处理返回值，这里面区分是否登录以及是否有权限(因为富文本返回map,不是ServerResponse)
             if(user == null){
                 if(StringUtils.equals(className,"ProductManageController") && StringUtils.equals(methodName,"richtextImgUpload")){
                     Map resultMap = Maps.newHashMap();

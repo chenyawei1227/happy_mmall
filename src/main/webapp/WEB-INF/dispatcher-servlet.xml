@@ -8,7 +8,9 @@
 	http://www.springframework.org/schema/mvc
 	http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <context:component-scan base-package="com.mmall" annotation-config="true"/>
+    <context:component-scan base-package="com.mmall" annotation-config="true" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
 
     <mvc:annotation-driven>
         <mvc:message-converters>
@@ -41,12 +43,12 @@
     <mvc:interceptors>
         <!-- 定义在这里的，所有的都会拦截-->
         <mvc:interceptor>
-            <!--manage/a.do  /manage/*-->
+            <!--manage/a.do  /manage/* 没有子路径-->
             <!--manage/b.do  /manage/*-->
-            <!--manage/product/save.do /manage/**-->
+            <!--manage/product/save.do /manage/**  有子路径-->
             <!--manage/order/detail.do /manage/**-->
             <mvc:mapping path="/manage/**"/>
-            <!--<mvc:exclude-mapping path="/manage/user/login.do"/>-->
+            <!--<mvc:exclude-mapping path="/manage/user/login.do"/>  排除拦截login.do -->
             <bean class="com.mmall.controller.common.interceptor.AuthorityInterceptor" />
         </mvc:interceptor>
 

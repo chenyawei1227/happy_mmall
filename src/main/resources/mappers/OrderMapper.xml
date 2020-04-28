@@ -231,8 +231,8 @@
         from mmall_order
         where status = #{status}
         <![CDATA[
-    and create_time <= #{date}
-    ]]>
+         and create_time <= #{date}
+        ]]>
         order by create_time desc
     </select>
 

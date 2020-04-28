@@ -567,7 +567,7 @@ public class OrderServiceImpl implements IOrderService {
             List<OrderItem> orderItemList = orderItemMapper.getByOrderNo(order.getOrderNo());
             for(OrderItem orderItem : orderItemList){
 
-                //一定要用主键where条件，防止锁表。同时必须是支持MySQL的InnoDB。
+                //一定要用主键where条件，防止锁表。同时必须是支持MySQL事务的InnoDB引擎。
                 Integer stock = productMapper.selectStockByProductId(orderItem.getProductId());
 
                 //考虑到已生成的订单里的商品，被删除的情况

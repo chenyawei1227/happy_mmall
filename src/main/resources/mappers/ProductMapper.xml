@@ -217,7 +217,6 @@
         from mmall_product
         where id = #{id}
             for update
-
     </select>
 
 </mapper>
