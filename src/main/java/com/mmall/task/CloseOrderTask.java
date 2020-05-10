@@ -30,19 +30,19 @@ public class CloseOrderTask {
     @Autowired
     private RedissonManager redissonManager;
 
+    //    @Scheduled(cron="0 */1 * * * ?")//每1分钟(每个1分钟的整数倍)
+    public void closeOrderTaskV1(){
+        log.info("关闭订单定时任务启动");
+        int hour = Integer.parseInt(PropertiesUtil.getProperty("close.order.task.time.hour","2"));
+        iOrderService.closeOrder(hour);
+        log.info("关闭订单定时任务结束");
+    }
+
     //tomcat在shutdown关闭之前执行@PreDestroy注解的方法，但是kill -9 线程的时候还是不会执行
     @PreDestroy
     public void delLock(){
         RedisShardedPoolUtil.del(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
 
-    }
-
-    //    @Scheduled(cron="0 */1 * * * ?")//每1分钟(每个1分钟的整数倍)
-    public void closeOrderTaskV1(){
-        log.info("关闭订单定时任务启动");
-        int hour = Integer.parseInt(PropertiesUtil.getProperty("close.order.task.time.hour","2"));
-//        iOrderService.closeOrder(hour);
-        log.info("关闭订单定时任务结束");
     }
 
     //    @Scheduled(cron="0 */1 * * * ?")
@@ -51,6 +51,8 @@ public class CloseOrderTask {
         long lockTimeout = Long.parseLong(PropertiesUtil.getProperty("lock.timeout","5000"));
 
         Long setnxResult = RedisShardedPoolUtil.setnx(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,String.valueOf(System.currentTimeMillis()+lockTimeout));
+        //这个版本是会有死锁的问题：当做完上面一行，并且还没有走下面一行时，服务器停了；这时就锁就无法释放，成为死锁。
+        // 解决方法：可以通过tomcat在shutdown关闭之前执行@PreDestroy注解的方法，但是kill -9 线程的时候还是不会执行
         if(setnxResult != null && setnxResult.intValue() == 1){
             //如果返回值是1，代表设置成功，获取锁
             closeOrder(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
@@ -97,7 +99,7 @@ public class CloseOrderTask {
             if(getLock = lock.tryLock(0,50, TimeUnit.SECONDS)){
                 log.info("Redisson获取到分布式锁:{},ThreadName:{}",Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,Thread.currentThread().getName());
                 int hour = Integer.parseInt(PropertiesUtil.getProperty("close.order.task.time.hour","2"));
-//                iOrderService.closeOrder(hour);
+                iOrderService.closeOrder(hour);
             }else{
                 log.info("Redisson没有获取到分布式锁:{},ThreadName:{}",Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,Thread.currentThread().getName());
             }
@@ -116,7 +118,7 @@ public class CloseOrderTask {
 
 
     private void closeOrder(String lockName){
-        RedisShardedPoolUtil.expire(lockName,5);//有效期50秒，防止死锁
+        RedisShardedPoolUtil.expire(lockName,5);//有效期5秒，防止死锁
         log.info("获取{},ThreadName:{}",Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,Thread.currentThread().getName());
         int hour = Integer.parseInt(PropertiesUtil.getProperty("close.order.task.time.hour","2"));
         iOrderService.closeOrder(hour);

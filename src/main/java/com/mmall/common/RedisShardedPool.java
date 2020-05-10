@@ -1,6 +1,7 @@
 package com.mmall.common;
 
 import com.mmall.util.PropertiesUtil;
+import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisShardInfo;
 import redis.clients.jedis.ShardedJedis;
