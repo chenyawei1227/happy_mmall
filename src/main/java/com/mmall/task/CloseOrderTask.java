@@ -75,7 +75,7 @@ public class CloseOrderTask {
             if(lockValueStr != null && System.currentTimeMillis() > Long.parseLong(lockValueStr)){
                 String getSetResult = RedisShardedPoolUtil.getSet(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK,String.valueOf(System.currentTimeMillis()+lockTimeout));
                 //再次用当前时间戳getset。
-                //返回给定的key的旧值，->旧值判断，是否可以获取锁
+                //返回给定的key的旧值，->旧值判断，是否可以获取锁`1
                 //当key没有旧值时，即key不存在时，返回nil ->获取锁
                 //这里我们set了一个新的value值，获取旧的值。
                 if(getSetResult == null || (getSetResult != null && StringUtils.equals(lockValueStr,getSetResult))){

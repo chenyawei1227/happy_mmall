@@ -98,7 +98,11 @@ public class CartServiceImpl implements ICartService {
         CartVo cartVo = new CartVo();
         List<Cart> cartList = cartMapper.selectCartByUserId(userId);
         List<CartProductVo> cartProductVoList = Lists.newArrayList();
-
+        /*
+            BigDecimal(int); 创建一个具有参数所指定整数值的对象
+            BigDecimal(double); 创建一个具有参数所指定双精度值的对象《不推荐使用》
+            BigDecimal(long); 创建一个具有参数所指定长度数值以字符串表示的数值的对象。《推荐使用》
+         */
         BigDecimal cartTotalPrice = new BigDecimal("0");
 
         if (CollectionUtils.isNotEmpty(cartList)) {
