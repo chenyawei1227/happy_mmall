@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
+import javax.print.attribute.standard.JobOriginatingUserName;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -32,5 +34,11 @@ public class User implements Serializable {
     private Date createTime;
 
     private Date updateTime;
+
+    public User(Integer id, String username, String password){
+        this.id = id;
+        this.username = username;
+        this.password = password;
+    }
 
 }
