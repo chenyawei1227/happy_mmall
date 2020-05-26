@@ -86,20 +86,58 @@ public class OrderServiceImpl implements IOrderService {
 
 
     public ServerResponse createOrder(Integer userId, Integer shippingId) {
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
-        ServerResponse response = ServerResponse.createBySuccessMessage("生成订单成");
-        try {
-            Future<ServerResponse> future = executorService.submit(new OrderRunner(userId,shippingId));
-            response = future.get();
-            log.info("====生成订单====返回：{}",response.toString());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            log.error("===生成订单异常===",e);
-            return ServerResponse.createByErrorMessage("生成订单异常");
+//        ExecutorService executorService = Executors.newFixedThreadPool(2);
+//        ServerResponse response = ServerResponse.createBySuccessMessage("生成订单成");
+//        try {
+//            Future<ServerResponse> future = executorService.submit(new OrderRunner(userId,shippingId));
+//            response = future.get();
+//            log.info("====生成订单====返回：{}",response.toString());
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            log.error("===生成订单异常===",e);
+//            return ServerResponse.createByErrorMessage("生成订单异常");
+//        }
+//        executorService.shutdown();
+//        return response;
+
+        //从购物车中获取数据
+        List<Cart> cartList = cartMapper.selectCheckedCartByUserId(userId);
+
+        //计算这个订单的总价
+        ServerResponse serverResponse = this.getCartOrderItem(userId, cartList);
+        if (!serverResponse.isSuccess()) {
+            return serverResponse;
         }
-        executorService.shutdown();
-        return response;
+        List<OrderItem> orderItemList = (List<OrderItem>) serverResponse.getData();
+        BigDecimal payment = this.getOrderTotalPrice(orderItemList);
+
+        //生成订单
+        Order order = this.assembleOrder(userId, shippingId, payment);
+        if (order == null) {
+            return ServerResponse.createByErrorMessage("生成订单错误");
+        }
+
+        if (CollectionUtils.isEmpty(orderItemList)) {
+            return ServerResponse.createByErrorMessage("购物车为空");
+        }
+
+        for (OrderItem orderItem : orderItemList) {
+            orderItem.setOrderNo(order.getOrderNo());
+        }
+
+        //mybatis 批量插入
+        orderItemMapper.batchInsert(orderItemList);
+
+        //生成成功，减少我们产品的库存
+        this.reduceProductStock(orderItemList);
+        //清空购物车
+        this.cleanCart(cartList);
+
+        //返回给前端数据
+        OrderVo orderVo = this.assembleOrderVo(order, orderItemList);
+
+        return ServerResponse.createBySuccess(orderVo);
     }
 
     public ServerResponse<String> cancel(Integer userId, Long orderNo) {
