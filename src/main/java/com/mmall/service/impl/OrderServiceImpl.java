@@ -19,6 +19,7 @@ import com.mmall.common.ServerResponse;
 import com.mmall.dao.*;
 import com.mmall.pojo.*;
 import com.mmall.service.IOrderService;
+import com.mmall.service.base.OrderRunner;
 import com.mmall.util.BigDecimalUtil;
 import com.mmall.util.DateTimeUtil;
 import com.mmall.util.FTPUtil;
@@ -41,6 +42,10 @@ import java.io.IOException;
 import java.lang.annotation.Target;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Created by chenyawei on 2017/7/29.
@@ -81,44 +86,20 @@ public class OrderServiceImpl implements IOrderService {
 
 
     public ServerResponse createOrder(Integer userId, Integer shippingId) {
-
-        //从购物车中获取数据
-        List<Cart> cartList = cartMapper.selectCheckedCartByUserId(userId);
-
-        //计算这个订单的总价
-        ServerResponse serverResponse = this.getCartOrderItem(userId, cartList);
-        if (!serverResponse.isSuccess()) {
-            return serverResponse;
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        ServerResponse response = ServerResponse.createBySuccessMessage("生成订单成");
+        try {
+            Future<ServerResponse> future = executorService.submit(new OrderRunner(userId,shippingId));
+            response = future.get();
+            log.info("====生成订单====返回：{}",response.toString());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            log.error("===生成订单异常===");
+            return ServerResponse.createByErrorMessage("生成订单异常");
         }
-        List<OrderItem> orderItemList = (List<OrderItem>) serverResponse.getData();
-        BigDecimal payment = this.getOrderTotalPrice(orderItemList);
-
-        //生成订单
-        Order order = this.assembleOrder(userId, shippingId, payment);
-        if (order == null) {
-            return ServerResponse.createByErrorMessage("生成订单错误");
-        }
-
-        if (CollectionUtils.isEmpty(orderItemList)) {
-            return ServerResponse.createByErrorMessage("购物车为空");
-        }
-
-        for (OrderItem orderItem : orderItemList) {
-            orderItem.setOrderNo(order.getOrderNo());
-        }
-
-        //mybatis 批量插入
-        orderItemMapper.batchInsert(orderItemList);
-
-        //生成成功，减少我们产品的库存
-        this.reduceProductStock(orderItemList);
-        //清空购物车
-        this.cleanCart(cartList);
-
-        //返回给前端数据
-        OrderVo orderVo = this.assembleOrderVo(order, orderItemList);
-
-        return ServerResponse.createBySuccess(orderVo);
+        executorService.shutdown();
+        return response;
     }
 
     public ServerResponse<String> cancel(Integer userId, Long orderNo) {
