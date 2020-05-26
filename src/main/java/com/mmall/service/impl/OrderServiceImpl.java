@@ -95,7 +95,7 @@ public class OrderServiceImpl implements IOrderService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
-            log.error("===生成订单异常===");
+            log.error("===生成订单异常===",e);
             return ServerResponse.createByErrorMessage("生成订单异常");
         }
         executorService.shutdown();
