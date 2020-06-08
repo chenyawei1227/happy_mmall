@@ -24,16 +24,21 @@ public class CookieUtil {
 
     public static String readLoginToken(HttpServletRequest request) {
         Cookie[] cks = request.getCookies();
+        String token = null;
         if (cks != null) {
             for (Cookie ck : cks) {
                 log.info("read cookieName:{},cookieValue:{}", ck.getName(), ck.getValue());
                 if (StringUtils.equals(ck.getName(), COOKIE_NAME)) {
                     log.info("return cookieName:{},cookieValue:{}", ck.getName(), ck.getValue());
-                    return ck.getValue();
+                    token = ck.getValue();
+                    return token;
                 }
             }
         }
-        return null;
+        if (token == null){
+            token = request.getHeader(COOKIE_NAME);
+        }
+        return token;
     }
 
     //X:domain=".happymmall.com"
