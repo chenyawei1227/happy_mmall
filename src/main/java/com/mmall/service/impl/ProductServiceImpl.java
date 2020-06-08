@@ -19,6 +19,7 @@ import com.mmall.vo.ProductListVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,8 @@ public class ProductServiceImpl implements IProductService {
     private ICategoryService iCategoryService;
 
 
+
+    @Transactional(rollbackFor = Exception.class)
     public ServerResponse saveOrUpdateProduct(Product product) {
         if (product != null) {
             if (StringUtils.isNotBlank(product.getSubImages())) {

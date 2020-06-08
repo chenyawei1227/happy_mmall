@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -29,6 +30,7 @@ public class CategoryServiceImpl implements ICategoryService {
     @Autowired
     private CategoryMapper categoryMapper;
 
+    @Transactional(rollbackFor = Exception.class)
     public ServerResponse addCategory(String categoryName, Integer parentId) {
         if (parentId == null || StringUtils.isBlank(categoryName)) {
             return ServerResponse.createByErrorMessage("添加品类差数错误");
@@ -39,10 +41,11 @@ public class CategoryServiceImpl implements ICategoryService {
         category.setStatus(true);//这个分类是可用的
 
         int rowCount = categoryMapper.insertSelective(category);
-        if (rowCount > 0) {
-            return ServerResponse.createBySuccess("添加商品成功");
-        }
-        return ServerResponse.createByErrorMessage("添加商品失败");
+        throw new RuntimeException("aaaaaaaaa");
+//        if (rowCount > 0) {
+//            return ServerResponse.createBySuccess("添加商品成功");
+//        }
+//        return ServerResponse.createByErrorMessage("添加商品失败");
     }
 
     public ServerResponse updateCategoryName(Integer categoryId, String categoryName) {
