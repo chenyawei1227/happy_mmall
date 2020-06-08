@@ -35,9 +35,9 @@ public class CookieUtil {
                 }
             }
         }
-        if (token == null){
-            token = request.getHeader(COOKIE_NAME);
-        }
+//        if (token == null){
+//            token = request.getHeader(COOKIE_NAME);
+//        }
         return token;
     }
 
@@ -57,7 +57,7 @@ public class CookieUtil {
         //如果这个maxage不设置的话，cookie就不会写入硬盘，而是写在内存。只在当前页面有效。
         ck.setMaxAge(60 * 60 * 24 * 365);//如果是-1，代表永久
         log.info("write cookieName:{},cookieValue:{}", ck.getName(), ck.getValue());
-        response.addHeader(COOKIE_NAME,token);
+//        response.addHeader(COOKIE_NAME,token);
         response.addCookie(ck);
     }
 
