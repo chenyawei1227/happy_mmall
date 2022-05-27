@@ -201,4 +201,11 @@
         and id != #{userId}
     </select>
 
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM mmall_user u
+        WHERE u.role = "0"
+    </select>
+
 </mapper>

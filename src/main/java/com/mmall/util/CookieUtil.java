@@ -7,8 +7,6 @@ import org.apache.commons.lang.StringUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.ws.spi.http.HttpExchange;
-import javax.xml.ws.spi.http.HttpHandler;
 
 
 /**
@@ -18,7 +16,8 @@ import javax.xml.ws.spi.http.HttpHandler;
 public class CookieUtil {
 
 
-    private final static String COOKIE_DOMAIN = "bytenote.cn"; // "localhost"; //".happymmall.com";
+    //本地调试的时候改为：//localhost
+    private final static String COOKIE_DOMAIN =  "localhost"; //"bytenote.cn"; // "localhost"; //".bytenote.com";
     private final static String COOKIE_NAME = "mmall_login_token";
 
 
@@ -35,30 +34,30 @@ public class CookieUtil {
                 }
             }
         }
-//        if (token == null){
-//            token = request.getHeader(COOKIE_NAME);
-//        }
+        if (token == null){
+            token = request.getHeader(COOKIE_NAME);
+        }
         return token;
     }
 
-    //X:domain=".happymmall.com"
-    //a:A.happymmall.com            cookie:domain=A.happymmall.com;path="/"
-    //b:B.happymmall.com            cookie:domain=B.happymmall.com;path="/"
-    //c:A.happymmall.com/test/cc    cookie:domain=A.happymmall.com;path="/test/cc"
-    //d:A.happymmall.com/test/dd    cookie:domain=A.happymmall.com;path="/test/dd"
-    //e:A.happymmall.com/test       cookie:domain=A.happymmall.com;path="/test"
-
+    //X:domain=".bytenote.com"
+    //a:A.bytenote.com            cookie:domain=A.bytenote.com;path="/"
+    //b:B.bytenote.com            cookie:domain=B.bytenote.com;path="/"
+    //c:A.bytenote.com/test/cc    cookie:domain=A.bytenote.com;path="/test/cc"
+    //d:A.bytenote.com/test/dd    cookie:domain=A.bytenote.com;path="/test/dd"
+    //e:A.bytenote.com/test       cookie:domain=A.bytenote.com;path="/test"
+//a拿不到b的，c拿不到d的，c和d能拿到e的,e拿不到c和d的；domain设置为一级域名就能共享所有的二级域名下的cookie
     public static void writeLoginToken(HttpServletResponse response, String token) {
         Cookie ck = new Cookie(COOKIE_NAME, token);
         ck.setDomain(COOKIE_DOMAIN);
         ck.setPath("/");//代表设置在根目录
-        ck.setHttpOnly(true);
+        ck.setHttpOnly(true);//防止脚本攻击
         //单位是秒。
         //如果这个maxage不设置的话，cookie就不会写入硬盘，而是写在内存。只在当前页面有效。
         ck.setMaxAge(60 * 60 * 24 * 365);//如果是-1，代表永久
         log.info("write cookieName:{},cookieValue:{}", ck.getName(), ck.getValue());
-//        response.addHeader(COOKIE_NAME,token);
         response.addCookie(ck);
+        response.addHeader(COOKIE_NAME,token);
     }
 
 
@@ -72,6 +71,7 @@ public class CookieUtil {
                     ck.setMaxAge(0);//设置成0，代表删除此cookie。
                     log.info("del cookieName:{},cookieValue:{}", ck.getName(), ck.getValue());
                     response.addCookie(ck);
+                    response.addHeader(COOKIE_NAME,null);
                     return;
                 }
             }

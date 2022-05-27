@@ -1,7 +1,11 @@
 package com.mmall.service;
 
+import com.github.pagehelper.PageInfo;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
+
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -28,4 +32,8 @@ public interface IUserService {
     ServerResponse<User> getInformation(Integer userId);
 
     ServerResponse checkAdminRole(User user);
+
+    ServerResponse<HashMap<String,Integer>> getHomeCount();
+
+    ServerResponse<PageInfo> list(int pageNum, int pageSize);
 }

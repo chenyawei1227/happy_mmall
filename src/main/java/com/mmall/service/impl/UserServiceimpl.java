@@ -1,16 +1,25 @@
 package com.mmall.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Maps;
 import com.mmall.common.Const;
 import com.mmall.common.ServerResponse;
-import com.mmall.dao.UserMapper;
+import com.mmall.dao.*;
 import com.mmall.pojo.User;
+import com.mmall.service.IMessageService;
+import com.mmall.service.IOrderService;
+import com.mmall.service.IProductService;
 import com.mmall.service.IUserService;
 import com.mmall.util.MD5Util;
 import com.mmall.util.RedisShardedPoolUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -21,6 +30,20 @@ public class UserServiceimpl implements IUserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private ProductMapper productMapper;
+
+    @Autowired
+    private OrderMapper orderMapper;
+
+    @Autowired
+    private MessageMapper messageMapper;
+
+    @Autowired
+    private NoticeMapper noticeMapper;
+
+
 
     public ServerResponse<User> login(String username, String password) {
         int resultCount = userMapper.checkUsername(username);
@@ -195,6 +218,31 @@ public class UserServiceimpl implements IUserService {
             return ServerResponse.createBySuccess();
         }
         return ServerResponse.createByError();
+    }
+
+    @Override
+    public ServerResponse<HashMap<String,Integer>> getHomeCount() {
+        HashMap<String,Integer> countMap = Maps.newHashMap();
+        Integer productNum = CollectionUtils.size(productMapper.selectList());
+        Integer orderNum = CollectionUtils.size(orderMapper.selectAllOrder());
+        Integer userNum = CollectionUtils.size(userMapper.selectAll());
+        Integer noticeNum = CollectionUtils.size(noticeMapper.selectList());
+        Integer messageNum = CollectionUtils.size(messageMapper.selectList());
+        countMap.put("productNum",productNum);
+        countMap.put("userNum",userNum);
+        countMap.put("messageNum",messageNum);
+        countMap.put("orderNum",orderNum);
+        countMap.put("noticeNum",noticeNum);
+        return ServerResponse.createBySuccess(countMap);
+    }
+
+    @Override
+    public ServerResponse<PageInfo> list(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
+        List<User> userList = userMapper.selectAll();
+        PageInfo pageInfo = new PageInfo(userList);
+        pageInfo.setList(userList);
+        return ServerResponse.createBySuccess(pageInfo);
     }
 
 

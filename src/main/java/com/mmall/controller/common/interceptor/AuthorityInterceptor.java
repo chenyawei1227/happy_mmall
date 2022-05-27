@@ -33,6 +33,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
         log.info("preHandle");
         //请求中Controller中的方法名
         HandlerMethod handlerMethod = (HandlerMethod)handler;
+        
 
         //解析HandlerMethod
 

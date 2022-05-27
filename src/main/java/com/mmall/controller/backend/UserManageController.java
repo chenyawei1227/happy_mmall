@@ -1,5 +1,6 @@
 package com.mmall.controller.backend;
 
+import com.github.pagehelper.PageInfo;
 import com.mmall.common.Const;
 import com.mmall.common.ServerResponse;
 import com.mmall.pojo.User;
@@ -9,13 +10,12 @@ import com.mmall.util.JsonUtil;
 import com.mmall.util.RedisShardedPoolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by chenyawei on 2017/7/5.
@@ -31,6 +31,8 @@ public class UserManageController {
     @RequestMapping(value="login.do",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse httpServletResponse){
+//        String username = userParam.getUsername();
+//        String password = userParam.getPassword();
         ServerResponse<User> response = iUserService.login(username,password);
         if(response.isSuccess()){
             User user = response.getData();
@@ -49,6 +51,20 @@ public class UserManageController {
         }
         return response;
     }
+
+    @RequestMapping(value = "get_home_count.do",method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<HashMap<String,Integer>> getHomeCount(){
+        return iUserService.getHomeCount();
+    }
+
+    @RequestMapping(value = "list.do",method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<PageInfo> list(@RequestParam(value = "pageNum",defaultValue = "1") int pageNum,
+                                         @RequestParam(value = "pageSize",defaultValue = "8") int pageSize){
+        return iUserService.list(pageNum, pageSize);
+    }
+
 
     @RequestMapping(value = "loginJson.do", method = RequestMethod.POST)
     @ResponseBody

@@ -26,6 +26,7 @@ public class OrderManageController {
     @Autowired
     private IOrderService iOrderService;
 
+    
     @RequestMapping("list.do")
     @ResponseBody
     public ServerResponse<PageInfo> orderList(HttpServletRequest httpServletRequest, @RequestParam(value = "pageNum",defaultValue = "1") int pageNum,
